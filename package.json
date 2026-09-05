@@ -1,0 +1,27 @@
+{
+  "name": "opencode-awesome-skills",
+  "version": "0.1.0",
+  "description": "Meta plugin for OpenCode that discovers, audits, installs, dedupes, and updates agent skills from skills.sh — plus agents and commands it can scaffold from them.",
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "skills",
+    "skills.sh",
+    "discovery",
+    "meta",
+    "agents"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "private": true,
+  "scripts": {
+    "setup": "bash ./install.sh",
+    "install:plugin": "bash ./install.sh .",
+    "check": "bash ./install.sh --check",
+    "smoke": "bun run smoke.ts",
+    "verify-copy": "bun run verify-copy.ts"
+  }
+}

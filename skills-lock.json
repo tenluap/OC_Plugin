@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "Quality Assurance": {
+      "source": "daffy0208/ai-dev-standards",
+      "sourceType": "github",
+      "skillPath": "skills/quality-assurance/SKILL.md",
+      "computedHash": "49334472b7c2ab54e4457db4b5b849563c1515e5af6c71bb7481559483edb262"
+    },
+    "typescript-review": {
+      "source": "metabase/metabase",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/typescript-review/SKILL.md",
+      "computedHash": "84aeb2f7fc4e7b02df3c7c7cb9ec93e22e7c014d9938bc98dcd071dc0865d7ee"
+    },
+    "writing-opencode-plugins": {
+      "source": "sveltejs/ai-tools",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/writing-opencode-plugins/SKILL.md",
+      "computedHash": "08acbb2a0a9917191c4f367899e880a7667e16ecaa3c0a8e044fc43ddc21fa47"
+    }
+  }
+}
