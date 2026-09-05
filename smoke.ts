@@ -94,7 +94,7 @@ check(
 // --- 5. frontmatter lint ----------------------------------------------------
 console.log("== assets ==");
 const nameRe = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-for await (const skillMd of new Bun.Glob(".opencode/skills/*/SKILL.md").scan()) {
+for await (const skillMd of new Bun.Glob(".opencode/skills/*/SKILL.md").scan({ dot: true })) {
   const dir = skillMd.split("/")[2];
   const head = await Bun.file(skillMd).text();
   const name = head.match(/^name:\s*(\S+)/m)?.[1];
@@ -106,6 +106,38 @@ for await (const skillMd of new Bun.Glob(".opencode/skills/*/SKILL.md").scan()) 
 const agentMd = await Bun.file(".opencode/agents/meta-agentic-project-scaffold.md").text();
 check("agent has description", /^description:/m.test(agentMd));
 check("agent mode valid", /mode:\s*(primary|subagent|all)/.test(agentMd));
+
+// --- 5b. agent frontmatter permission schema -------------------------------
+// Current OpenCode schema: permission keys are tool names, values only
+// allow/ask/deny. Legacy `tools:` boolean maps and hardcoded `model:` fields
+// are banned (model omission = user's default OpenCode model).
+console.log("== agent frontmatter schema ==");
+for await (const agentPath of new Bun.Glob(".opencode/agents/*.md").scan({ dot: true })) {
+  const fm = (await Bun.file(agentPath).text()).split("---")[1] ?? "";
+  check(`${agentPath}: no legacy tools: map`, !/^tools:/m.test(fm));
+  check(`${agentPath}: no model: field`, !/^model:/m.test(fm));
+  const permValues: string[] = [];
+  let inPerm = false;
+  for (const line of fm.split("\n")) {
+    if (/^permission:/.test(line)) {
+      inPerm = true;
+      continue;
+    }
+    if (inPerm) {
+      if (/^\S/.test(line)) inPerm = false;
+      else {
+        const m = line.match(/^\s+[\w*?"'-]+:\s*(.+)$/);
+        if (m) permValues.push(m[1].trim().replace(/^["']|["']$/g, ""));
+      }
+    }
+  }
+  const bad = permValues.filter((v) => !["allow", "ask", "deny"].includes(v));
+  check(
+    `${agentPath}: permission values only allow/ask/deny`,
+    bad.length === 0,
+    bad.join(" | "),
+  );
+}
 for (const cmd of ["suggest-skills", "suggest-agents", "suggest-instructions", "scaffold"]) {
   const md = await Bun.file(`.opencode/commands/${cmd}.md`).text();
   check(`command ${cmd}: has description + body`, /^description:/m.test(md) && md.split("---").at(-1)!.trim().length > 0);

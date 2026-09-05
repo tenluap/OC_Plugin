@@ -18,7 +18,7 @@
   },
   "private": true,
   "scripts": {
-    "setup": "bash ./install.sh",
+    "setup": "bash ./install.sh --global",
     "install:plugin": "bash ./install.sh .",
     "check": "bash ./install.sh --check",
     "smoke": "bun run smoke.ts",
