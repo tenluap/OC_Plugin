@@ -19,7 +19,7 @@ Analyze the current repository context and propose OpenCode agents (markdown fil
 5. **Dedupe**: Drop candidates that duplicate an existing agent's purpose or a built-in. Record near-duplicates in the table instead of suggesting them.
 6. **Outdated Check**: For agents this plugin previously generated (their body cites a skills.sh source in a `source:` front matter note), call `skills_sh_detail` for the source skill and compare the SKILL.md content against the material the agent was built from; flag drift with ⚠️.
 7. **Present Options**: Output the structured table below. **AWAIT the user's explicit request before creating any agent. DO NOT CREATE AGENTS UNLESS DIRECTED TO DO SO.**
-8. **Create on Request**: For each approved agent, fetch the skill's SKILL.md (`skills_sh_detail`, or the raw GitHub fallback) and write `.opencode/agents/<agent-name>.md` with front matter `description`, `mode`, and (when scoping matters) `permission` entries, and a body that carries over the skill's instructions faithfully — adapted to OpenCode tool names, but do not invent new behaviors the skill doesn't describe. Record provenance in the body's first line: `<!-- generated from skills.sh <owner/repo/slug> on <date> -->`.
+8. **Create on Request**: For each approved agent, fetch the skill's SKILL.md (`skills_sh_detail`, or the raw GitHub fallback) and write `.opencode/agents/<agent-name>.md` with front matter `description`, `mode`, and (when scoping matters) `permission` entries — **never a `model` field**. Omitting `model` makes the agent run on the user's default OpenCode model; do not copy any `model:` hint from the source skill. The body carries over the skill's instructions faithfully — adapted to OpenCode tool names, but do not invent new behaviors the skill doesn't describe. Record provenance in the body's first line: `<!-- generated from skills.sh <owner/repo/slug> on <date> -->`.
 9. **Verify**: Re-scan `.opencode/agents/`, confirm each file's front matter parses (name matches filename: lowercase-hyphen), and report the new agents with how to invoke them (@mention or Task tool).
 
 ## Output Format
@@ -39,7 +39,7 @@ Icons reference:
 ## Requirements
 
 - Use the `skills_sh_*` tools for discovery and content; do not fabricate skill contents.
-- Agents must follow OpenCode agent markdown conventions: YAML front matter (`description` required; `mode`, `model`, `temperature`, `permission` optional), body = system prompt, filename = agent name in lowercase-hyphen form.
+- Agents must follow OpenCode agent markdown conventions: YAML front matter (`description` required; `mode`, `temperature`, `permission` optional; **never set `model`** — leaving it out selects the user's default OpenCode model), body = system prompt, filename = agent name in lowercase-hyphen form.
 - Default new agents to `mode: subagent` unless the user asks for a switchable primary agent.
 - Keep output to the table plus at most a short preamble.
 - Creation is consent-gated: table first, act only on the user's instruction.

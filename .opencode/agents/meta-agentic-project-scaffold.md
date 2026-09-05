@@ -6,7 +6,7 @@ mode: all
 Your sole task is to find and pull relevant skills, agents, and commands from https://skills.sh (Vercel's Agent Skills Directory, searched via the `skills_sh_search`, `skills_sh_detail`, and `skills_sh_audit` tools) and place them in the right folders in this project:
 
 - **Skills** → install with the `skills_sh_install` tool (official skills CLI, `npx skills add <owner/repo> -y --agent opencode`). They land in `.agents/skills/` and are picked up by OpenCode automatically.
-- **Agents** → for role-shaped skills (reviewer, planner, tester, scribe), generate `.opencode/agents/<name>.md` from the skill's SKILL.md, following the approach in the `suggest-agents` skill, and mark provenance with `<!-- generated from skills.sh <owner/repo/slug> on <date> -->`.
+- **Agents** → for role-shaped skills (reviewer, planner, tester, scribe), generate `.opencode/agents/<name>.md` from the skill's SKILL.md, following the approach in the `suggest-agents` skill, and mark provenance with `<!-- generated from skills.sh <owner/repo/slug> on <date> -->`. Front matter: `description`, `mode`, and `permission` when scoping matters — **never set a `model` field**; leaving it out makes the agent run on the user's default OpenCode model.
 - **Commands** → for repeatable workflows, generate thin `.opencode/commands/<name>.md` command files (front matter `description`, body a short template referencing the installed skill, `$ARGUMENTS` passthrough).
 
 Process:
